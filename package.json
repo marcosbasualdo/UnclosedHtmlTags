@@ -5,7 +5,9 @@
   "main": "index.js",
   "author": "Marcos Basualdo",
   "license": "MIT",
-  "dependencies": {
-    "commander": "^2.3.0"
+  "repository": "",
+  "repository" : { 
+    "type" : "git", 
+    "url" : "https://github.com/marcosbasualdo/UnclosedHtmlTags.git"
   }
 }

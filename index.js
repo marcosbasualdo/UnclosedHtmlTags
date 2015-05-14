@@ -1,11 +1,5 @@
 var fs = require('fs'),
-pjson = require('./package.json'),
-program = require('commander');
-
-program.version(pjson.version)
-.option('-d, --directory [Directory]', 'select directory')
-.parse(process.argv);
-
+pjson = require('./package.json');
 
 function getFilesFromDirectory(dir,callback) {
     var files = [];
@@ -128,8 +122,8 @@ function findUnclosed(string){
     return {passed:!errors.length, errors: errors};
 }
 
-function main(){
-    getFilesFromDirectory(program.directory,function(err,files){
+function analyze(path){
+    getFilesFromDirectory(path,function(err,files){
         var errorCount = 0;
         files.forEach(function(f){
             if(f.split('.').pop() != 'html') return;
@@ -146,4 +140,7 @@ function main(){
         console.log([errorCount,files.length].join('/'), 'files with errors');
     });
 }
-main();
+
+module.exports = {
+    analyze: analyze
+}
