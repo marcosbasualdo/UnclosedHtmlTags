@@ -1,0 +1,11 @@
+{
+  "name": "UnclosedHtmlTags",
+  "version": "1.0.0",
+  "description": "Script to find unclosed html tags",
+  "main": "index.js",
+  "author": "Marcos Basualdo",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.3.0"
+  }
+}
