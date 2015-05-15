@@ -125,10 +125,13 @@ function findUnclosed(string){
 function analyze(path){
     getFilesFromDirectory(path,function(err,files){
         var errorCount = 0;
+        var filesCount = 0;
         files.forEach(function(f){
             if(f.split('.').pop() != 'html') return;
+            console.log('html',f);
+            filesCount++;
             var content = fs.readFileSync(f,'utf-8');
-            console.log('Analysing file: '+f);
+            console.log('Analyzing file: '+f);
             var result = findUnclosed(content);
             if(result.passed){
                 console.log('OK:',f);
@@ -137,7 +140,7 @@ function analyze(path){
                 result.errors.forEach(function(e){console.log('ERROR:',f,e)});
             }
         });
-        console.log([errorCount,files.length].join('/'), 'files with errors');
+        console.log([errorCount,filesCount].join('/'), 'html files with errors');
     });
 }
 
