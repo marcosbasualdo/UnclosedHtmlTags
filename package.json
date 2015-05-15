@@ -1,6 +1,6 @@
 {
   "name": "unclosedhtmltags",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Script to find unclosed html tags",
   "main": "index.js",
   "author": "Marcos Basualdo",
