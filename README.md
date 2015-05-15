@@ -9,5 +9,5 @@ $ npm install unclosedhtmltags
 ###Usage:
 ```js
 var unclosedhtmltags = require("unclosedhtmltags");
-unclosedhtmltags.analyze('.'); /Analyze html in current directory (Recursively analizes children directories too)
+unclosedhtmltags.analyze('.'); //Analyze html in current directory (Recursively analizes children directories too)
 ```
