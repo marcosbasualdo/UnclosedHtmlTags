@@ -1,13 +1,26 @@
 {
-  "name": "UnclosedHtmlTags",
+  "name": "unclosedhtmltags",
   "version": "1.0.0",
   "description": "Script to find unclosed html tags",
   "main": "index.js",
   "author": "Marcos Basualdo",
   "license": "MIT",
-  "repository": "",
-  "repository" : { 
-    "type" : "git", 
-    "url" : "https://github.com/marcosbasualdo/UnclosedHtmlTags.git"
-  }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marcosbasualdo/UnclosedHtmlTags.git"
+  },
+  "bugs": {
+    "url": "https://github.com/marcosbasualdo/UnclosedHtmlTags/issues"
+  },
+  "homepage": "https://github.com/marcosbasualdo/UnclosedHtmlTags",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "unclosed",
+    "html",
+    "tags",
+    "htmllint",
+    "validator"
+  ]
 }
