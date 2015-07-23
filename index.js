@@ -1,5 +1,11 @@
+var ERROR_TYPES = {
+  MISSING_OPENING_TAG: 'MISSING_OPENING_TAG',
+  INVALID_CLOSE_TAG: 'INVALID_CLOSE_TAG',
+  UNCLOSED_TAG: 'UNCLOSED_TAG'
+};
+
 var fs = require('fs'),
-pjson = require('./package.json');
+  pjson = require('./package.json');
 
 function getFilesFromDirectory(dir,callback) {
     var files = [];
@@ -44,7 +50,7 @@ function removeTag(tag,string,preserveSpace){
     var reg = new RegExp('<'+tag+'[^>]*>([^<]*(?:(?!<\/'+tag+'>)<[^<]*)*)<\/'+tag+'>','ig');
     return string.replace(reg,function(m){
         return preserveSpace ? m.split('\n').map(function(){return ''}).join('\n') : '';
-    });	
+    });
 }
 
 function cleanHtml(string){
@@ -91,10 +97,10 @@ function findUnclosed(string){
     string = cleanHtml(string),
     errors = [];
 
-    string.split('\n').forEach(function(line,i){        
+    string.split('\n').forEach(function(line,i){
         while ((match = reg.exec(line)) !== null) {
             tags.push({name:match[2],tag:match[1],line:i+1});
-        }		
+        }
     });
 
     tags.forEach(function(tag){
@@ -102,12 +108,22 @@ function findUnclosed(string){
         if(!tagName || isSelfClosingTag(tagName)) return;
         if(closing = isClosingTagOf(tagName)){
             if(tagsStack.length == 0){
-                errors.push(['Closing tag',tag.tag, 'defined on line',tag.line,'doesn\'t have corresponding open tag'].join(' '));
+                errors.push({message: ['Closing tag',tag.tag, 'defined on line',tag.line,'doesn\'t have corresponding open tag'].join(' '),
+                  type: ERROR_TYPES.MISSING_OPENING_TAG,
+                  openingTag: undefined,
+                  closingTag: tag.tag,
+                  line: tag.line,
+                });
                 return;
             }
             var op = tagsStack.pop();
             if(closing != op.name){
-                errors.push(['Close tag',tag.tag, 'defined on line',tag.line,'doesn\'t match open tag',op.tag,'defined on line',op.line].join(' '));
+                errors.push({message: ['Close tag', tag.tag, 'defined on line', tag.line, 'doesn\'t match open tag', op.tag, 'defined on line', op.line].join(' '),
+                  type: ERROR_TYPES.INVALID_CLOSE_TAG,
+                  openingTag: op.tag,
+                  closingTag: tag.tag,
+                  line: tag.line
+                });
                 return;
             }
         }else{
@@ -116,7 +132,12 @@ function findUnclosed(string){
     });
 
     tagsStack.forEach(function(tag){
-        errors.push(['Unclosed tag',tag.tag,'defined on line',tag.line].join(' '));
+        errors.push({message: ['Unclosed tag',tag.tag,'defined on line',tag.line].join(' '),
+          type: ERROR_TYPES.UNCLOSED_TAG,
+          openingTag: tag.tag,
+          closingTag: undefined,
+          line: tag.line
+        });
     });
 
     return {passed:!errors.length, errors: errors};
@@ -137,7 +158,7 @@ function analyze(path){
                 console.log('OK:',f);
             }else{
                 errorCount++;
-                result.errors.forEach(function(e){console.log('ERROR:',f,e)});
+                result.errors.forEach(function(e){console.log('ERROR:', f, e.message)});
             }
         });
         console.log([errorCount,filesCount].join('/'), 'html files with errors');
@@ -145,5 +166,7 @@ function analyze(path){
 }
 
 module.exports = {
+    ERROR_TYPES: ERROR_TYPES,
+    findUnclosed: findUnclosed,
     analyze: analyze
-}
+};
